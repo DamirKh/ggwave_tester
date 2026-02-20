@@ -5,6 +5,16 @@ import os
 from contextlib import contextmanager
 import wave
 
+protocols = [
+    (0, "Normal"),
+    (1, "Fast"),
+    (2, "Fastest"),
+    (3, "U-Normal"),
+    (4, "U-Fast"),
+    (5, "U-Fastest"),
+]
+
+snr_levels = [40, 30, 20, 15, 10, 5, 0, -5, -10, -15, -20]
 
 def save_waveform(waveform_bytes, filename, sample_rate=48000):
     """Сохраняет float32 waveform в WAV файл"""
@@ -69,13 +79,6 @@ def test_noise_resistance():
     print(f"Формат: float32 PCM, диапазон [-1.0, 1.0]")
     print()
 
-    protocols = [
-        (1, "Fast"),
-        (3, "Normal"),
-        (5, "Robust"),
-    ]
-
-    snr_levels = [40, 30, 20, 15, 10, 5, 0, -5, -10, -15, -20]
 
     # Структура для накопления результатов: {protocol_name: {snr: status}}
     all_results = {}
@@ -135,10 +138,10 @@ def test_noise_resistance():
 
     # Строки результатов
     for snr in snr_levels:
-        row = f"{snr:>10}"
+        row = f"{snr:>10} "
         for proto_name in all_results.keys():
             status = all_results[proto_name].get(snr, "❌ ?")
-            row += f" | {status:>10}"
+            row += f"| {status:>10}"
         print(row)
 
     print()
